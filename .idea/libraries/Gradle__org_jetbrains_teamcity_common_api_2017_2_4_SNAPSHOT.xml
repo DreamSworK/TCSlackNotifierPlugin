@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jetbrains.teamcity:common-api:2017.2.4-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.teamcity/common-api/2017.2.4-SNAPSHOT/bd508a8ffe4131c427a95974593834b62c41603a/common-api-2017.2.4-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.teamcity/common-api/2017.2.4-SNAPSHOT/fadb77eaf816470a424879fb89d5c6c78cab387c/common-api-2017.2.4-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
