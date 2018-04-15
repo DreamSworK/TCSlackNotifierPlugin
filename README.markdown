@@ -36,8 +36,8 @@ Edit the main config file, usually `.BuildServer/config/main-config.xml` and add
   ...
   <slackNotifier postSuccessful="true" postFailed="false" postStarted="false" >
     <slackDefaultChannel>#general</slackDefaultChannel>
-    <slackPostUrl>https://hooks.slack.com/services/YYYYYY/XXXXXXX/ZZZZZZZZZZZZ</slackPostUrl>
-    <slackLogoUrl>http://build.tapadoo.com/img/icons/TeamCity32.png</slackLogoUrl>
+    <slackPostUrl>https://hooks.slack.com/services/XXX/YYY/ZZZ</slackPostUrl>
+    <slackLogoUrl>http://logo.png</slackLogoUrl>
   </slackNotifier>
   ...
   ...
@@ -53,13 +53,14 @@ This by default will post all builds to slack. you can tweak these on a project 
 
 To change channel, change the slack logo used for that project or disable per project:
 
-Edit the plugin specific xml config, `plugin-settings.xml` probably somewhere inside `.BuildServer/config/projects/PROJECTNAME`
+Edit the plugin specific xml config, `plugin-settings.xml` probably somewhere inside `.BuildServer/config/projects/PROJECTNAME/pluginData`
 
 ```
 <settings>
-  <slackSettings enabled="true">
+  <slackSettings enabled="true" build="false" issues="false" committers="false">
     <channel>#blah</channel>
-    <logoUrl>http://host/somelogo.png</logoUrl>
+    <postUrl>https://hooks.slack.com/services/XXX/YYY/ZZZ</postUrl>
+    <logoUrl>http://logo.png</logoUrl>
   </slackSettings>
 </settings>
 ```

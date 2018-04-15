@@ -28,15 +28,9 @@ public class SlackConfigProcessor implements MainConfigProcessor {
     private boolean postStarted = false ;
     private boolean postFailed = false ;
 
-    public SlackConfigProcessor()
-    {
+    public SlackConfigProcessor() { }
 
-    }
-
-    public void init()
-    {
-
-    }
+    public void init() { }
 
     public boolean postSuccessful()
     {

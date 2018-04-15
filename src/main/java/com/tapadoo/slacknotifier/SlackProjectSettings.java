@@ -5,27 +5,31 @@ import org.jdom.Attribute;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 
-/**
- * Created by jasonconnery on 02/03/2014.
- */
 public class SlackProjectSettings implements ProjectSettings {
 
-    public static final String ELEMENT_LOGO_URL = "logoUrl";
-    public static final String ATTR_ENABLED = "enabled";
-    public static final String ELEMENT_CHANNEL = "channel";
-    private String projectId;
+    public String projectId;
+
+    private static final String ATTRIBUTE_ENABLED = "enabled";
+    private static final String ATTRIBUTE_BUILD = "build";
+    private static final String ATTRIBUTE_ISSUES = "issues";
+    private static final String ATTRIBUTE_COMMITTERS = "committers";
+    private boolean enabled = true;
+    private boolean build = true;
+    private boolean issues = true;
+    private boolean committers = true;
+
+    private static final String ELEMENT_CHANNEL = "channel";
+    private static final String ELEMENT_POST_URL = "postUrl";
+    private static final String ELEMENT_LOGO_URL = "logoUrl";
     private String channel;
+    private String postUrl;
     private String logoUrl;
-    private boolean enabled = true ;
 
     public SlackProjectSettings(String projectId) {
         this.projectId = projectId ;
     }
 
-    public SlackProjectSettings()
-    {
-
-    }
+    public SlackProjectSettings() { }
 
     public String getChannel() {
         return channel;
@@ -33,6 +37,14 @@ public class SlackProjectSettings implements ProjectSettings {
 
     public void setChannel(String channel) {
         this.channel = channel;
+    }
+
+    public String getPostUrl() {
+        return postUrl;
+    }
+
+    public void setPostUrl(String postUrl) {
+        this.postUrl = postUrl;
     }
 
     public String getLogoUrl() {
@@ -43,56 +55,90 @@ public class SlackProjectSettings implements ProjectSettings {
         this.logoUrl = logoUrl;
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
-    public void dispose() {
-
+    public boolean isAddBuild() {
+        return this.build;
     }
 
-    public void readFrom(Element element) {
-        Element channelElement = element.getChild(ELEMENT_CHANNEL);
-        Element logoElement = element.getChild(ELEMENT_LOGO_URL);
-        Attribute enabledAttr = element.getAttribute(ATTR_ENABLED);
+    public boolean isAddIssues() {
+        return this.issues;
+    }
 
-        if( enabledAttr != null )
+    public boolean isAddCommitters() {
+        return this.committers;
+    }
+
+    public void dispose() { }
+
+    private boolean readAttribute(Element rootElement, String attributeName)
+    {
+        boolean result;
+        Attribute attribute = rootElement.getAttribute(attributeName);
+        if(attribute != null)
         {
             try {
-                enabled = enabledAttr.getBooleanValue() ;
+                result = attribute.getBooleanValue();
             } catch (DataConversionException e) {
-                enabled = true ;
+                result = true;
             }
         }
         else
         {
-            enabled = true ;
+            result = true;
         }
+        return result;
+    }
 
-        if( channelElement != null ) {
-            this.channel = channelElement.getText();
-        }
-
-        if( logoElement != null )
+    private String readElement(Element rootElement, String elementName)
+    {
+        Element element = rootElement.getChild(elementName);
+        if(element != null)
         {
-            this.logoUrl = logoElement.getText();
+            return element.getText();
+        }
+        else
+        {
+            return null;
         }
     }
 
-    public void writeTo(Element element) {
+    public void readFrom(Element element)
+    {
+        this.enabled = readAttribute(element, ATTRIBUTE_ENABLED);
+        this.build = readAttribute(element, ATTRIBUTE_BUILD);
+        this.issues = readAttribute(element, ATTRIBUTE_ISSUES);
+        this.committers = readAttribute(element, ATTRIBUTE_COMMITTERS);
 
-        Element channelElement = new Element(ELEMENT_CHANNEL);
-        channelElement.setText(this.channel);
-
-        Element logoUrlElement = new Element(ELEMENT_LOGO_URL);
-        logoUrlElement.setText(this.logoUrl);
-
-        Attribute enabledAttr = new Attribute(ATTR_ENABLED,Boolean.toString(enabled)) ;
-        element.setAttribute( enabledAttr );
-
-        element.addContent(channelElement);
-        element.addContent(logoUrlElement);
+        this.channel = readElement(element, ELEMENT_CHANNEL);
+        this.postUrl = readElement(element, ELEMENT_POST_URL);
+        this.logoUrl = readElement(element, ELEMENT_LOGO_URL);
     }
 
+    private void writeElement(Element rootElement, String elementName, String elementValue)
+    {
+        Element element = new Element(elementName);
+        element.setText(elementValue);
+        rootElement.addContent(element);
+    }
+
+    private void writeAttribute(Element rootElement, String attributeName, Boolean attributeValue)
+    {
+        Attribute attribute = new Attribute(attributeName, Boolean.toString(attributeValue));
+        rootElement.setAttribute(attribute);
+    }
+
+    public void writeTo(Element element)
+    {
+        writeAttribute(element, ATTRIBUTE_ENABLED, this.enabled);
+        writeAttribute(element, ATTRIBUTE_BUILD, this.build);
+        writeAttribute(element, ATTRIBUTE_ISSUES, this.issues);
+        writeAttribute(element, ATTRIBUTE_COMMITTERS, this.committers);
+
+        writeElement(element, ELEMENT_CHANNEL, this.channel);
+        writeElement(element, ELEMENT_POST_URL, this.postUrl);
+        writeElement(element, ELEMENT_LOGO_URL, this.logoUrl);
+    }
 }
